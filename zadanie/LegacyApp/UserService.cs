@@ -10,13 +10,14 @@ namespace LegacyApp
         {
             _clientRepository = clientRepository ?? new InMemoryClientRepository();
         }
-        
+
+        private static bool AreNamesValid(string firstName, string lastName) => 
+            !string.IsNullOrEmpty(firstName) && !string.IsNullOrEmpty(lastName);
+
         public bool AddUser(string firstName, string lastName, string email, DateTime dateOfBirth, int clientId)
         {
-            if (string.IsNullOrEmpty(firstName) || string.IsNullOrEmpty(lastName))
-            {
+            if (!AreNamesValid(firstName, lastName))
                 return false;
-            }
 
             if (!email.Contains("@") && !email.Contains("."))
             {
