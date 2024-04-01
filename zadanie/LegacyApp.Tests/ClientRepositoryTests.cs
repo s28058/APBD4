@@ -3,7 +3,7 @@ using LegacyApp;
 
 namespace LegacyApp.Tests;
 
-[TestSubject(typeof(ClientRepository))]
+[TestSubject(typeof(InMemoryClientRepository))]
 public class ClientRepositoryTests
 {
 
@@ -11,7 +11,7 @@ public class ClientRepositoryTests
     public void ShouldReturnClientWhenExists()
     {
         // Arrange
-        var clientRepository = new ClientRepository();
+        var clientRepository = new InMemoryClientRepository();
 
         // Act
         var client = clientRepository.GetById(1);
@@ -24,7 +24,7 @@ public class ClientRepositoryTests
     public void ShouldThrowExceptionWhenClientDoesntExists()
     {
         // Arrange
-        var clientRepository = new ClientRepository();
+        var clientRepository = new InMemoryClientRepository();
 
         // Act
         var action = () => clientRepository.GetById(8);

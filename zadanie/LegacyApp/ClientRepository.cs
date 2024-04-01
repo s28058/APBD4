@@ -4,7 +4,16 @@ using System.Threading;
 
 namespace LegacyApp
 {
-    public class ClientRepository
+    public interface IClientRepository
+    {
+        /// <summary>
+        /// Simulating fetching a client from remote database
+        /// </summary>
+        /// <returns>Returning client object</returns>
+        Client GetById(int clientId);
+    }
+
+    public class InMemoryClientRepository : IClientRepository
     {
         /// <summary>
         /// This collection is used to simulate remote database
@@ -19,7 +28,7 @@ namespace LegacyApp
             {6, new Client{ClientId = 6, Name = "Andrzejewicz", Address = "Warszawa, Koszykowa 52", Email = "andrzejewicz@wp.pl", Type = "NormalClient"}}
         };
         
-        public ClientRepository()
+        public InMemoryClientRepository()
         {
         }
 
@@ -27,7 +36,7 @@ namespace LegacyApp
         /// Simulating fetching a client from remote database
         /// </summary>
         /// <returns>Returning client object</returns>
-        internal Client GetById(int clientId)
+        public Client GetById(int clientId)
         {
             int randomWaitTime = new Random().Next(2000);
             Thread.Sleep(randomWaitTime);
