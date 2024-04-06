@@ -40,11 +40,9 @@ namespace LegacyApp
         {
             int randomWaitTime = new Random().Next(2000);
             Thread.Sleep(randomWaitTime);
-
-            if (Database.ContainsKey(clientId))
-                return Database[clientId];
-
-            throw new ArgumentException($"User with id {clientId} does not exist in database");
+            
+            return Database.GetValueOrDefault(clientId)
+                ?? throw new ArgumentException($"User with id {clientId} does not exist in database", nameof(clientId));
         }
     }
 }
