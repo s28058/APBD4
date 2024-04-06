@@ -14,21 +14,34 @@ namespace LegacyApp
         private static bool AreNamesValid(string firstName, string lastName) => 
             !string.IsNullOrEmpty(firstName) && !string.IsNullOrEmpty(lastName);
 
-        public bool AddUser(string firstName, string lastName, string email, DateTime dateOfBirth, int clientId)
+        private static bool IsEmailValid(string email) =>
+            email.Contains("@") && email.Contains(".");
+
+        private static bool IsUserOver21y(DateTime dateOfBirth)
         {
-            if (!AreNamesValid(firstName, lastName))
-                return false;
-
-            if (!email.Contains("@") && !email.Contains("."))
-            {
-                return false;
-            }
-
             var now = DateTime.Now;
             int age = now.Year - dateOfBirth.Year;
             if (now.Month < dateOfBirth.Month || (now.Month == dateOfBirth.Month && now.Day < dateOfBirth.Day)) age--;
 
             if (age < 21)
+            {
+                return false;
+            }
+
+            return true;
+        }
+
+        public bool AddUser(string firstName, string lastName, string email, DateTime dateOfBirth, int clientId)
+        {
+            if (!AreNamesValid(firstName, lastName))
+                return false;
+
+            if (!IsEmailValid(email))
+            {
+                return false;
+            }
+
+            if (!IsUserOver21y(dateOfBirth))
             {
                 return false;
             }
