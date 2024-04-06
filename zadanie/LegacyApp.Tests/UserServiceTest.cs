@@ -63,16 +63,4 @@ public class UserServiceTest
         Assert.False(success);
     }
     
-  /*  [Fact]
-    public void ShouldAddUserSuccesfully()
-    {
-        // Arrange
-        var userService = new UserService();
-
-        // Act
-        var success = userService.AddUser("Kazimierz", "Wielki", "ja@tu.com", DateTime.Now.AddYears(-22), 100);
-
-        // Assert
-        Assert.True(success);
-  */  
 }

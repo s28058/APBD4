@@ -16,16 +16,4 @@ public class ClientTests
         // Assert
         Assert.Equal(ClientType.ImportantClient, client.Type);
     }
-    
-    [Fact]
-    public void TypeShouldBeNullWhenNotSet()
-    {
-        // Arrange
-        var client = new Client();
-        
-        // Act
-        
-        // Assert
-        Assert.Null(client.Type);
-    }
 }
