@@ -4,19 +4,24 @@ namespace LegacyApp
 {
     public class UserService
     {
+       
         private readonly IClientRepository _clientRepository;
-        
-        public UserService(IClientRepository clientRepository = null)
+        private readonly IUserValidator _userValidator;
+        private readonly ICreditLimitService _creditLimitService;
+
+        public UserService(IClientRepository clientRepository = null,
+            IUserValidator userValidator = null,
+            ICreditLimitService creditLimitService = null)
         {
             _clientRepository = clientRepository ?? new InMemoryClientRepository();
+            _userValidator = userValidator ?? new UserValidator();
+            _creditLimitService = creditLimitService ?? new CreditLimitService(new UserCreditService());
         }
-
         
 
         public bool AddUser(string firstName, string lastName, string email, DateTime dateOfBirth, int clientId)
         {
-            var userValidator = new UserValidator();
-            if (!userValidator.ValidateUser(firstName,lastName,email,dateOfBirth))
+            if (!_userValidator.ValidateUser(firstName,lastName,email,dateOfBirth))
             {
                 return false;
             }
@@ -32,28 +37,8 @@ namespace LegacyApp
                 LastName = lastName
             };
 
-            if (client.Type == ClientType.VeryImportantClient)
-            {
-                user.HasCreditLimit = false;
-            }
-            else if (client.Type == ClientType.ImportantClient)
-            {
-                using (var userCreditService = new UserCreditService())
-                {
-                    int creditLimit = userCreditService.GetCreditLimit(user.LastName, user.DateOfBirth);
-                    creditLimit = creditLimit * 2;
-                    user.CreditLimit = creditLimit;
-                }
-            }
-            else
-            {
-                user.HasCreditLimit = true;
-                using (var userCreditService = new UserCreditService())
-                {
-                    int creditLimit = userCreditService.GetCreditLimit(user.LastName, user.DateOfBirth);
-                    user.CreditLimit = creditLimit;
-                }
-            }
+            user.HasCreditLimit = client.Type != ClientType.VeryImportantClient;
+            user.CreditLimit = _creditLimitService.GetCreditLimit(lastName, client.Type);
 
             if (user.HasCreditLimit && user.CreditLimit < 500)
             {

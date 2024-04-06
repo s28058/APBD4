@@ -2,13 +2,18 @@ using System;
 
 namespace LegacyApp;
 
-public class UserValidator
+public interface IUserValidator
+{
+    bool ValidateUser(string firstName, string lastName, string email, DateTime dateOfBirth);
+}
+
+public class UserValidator : IUserValidator
 {
     private static bool AreNamesValid(string firstName, string lastName) => 
         !string.IsNullOrEmpty(firstName) && !string.IsNullOrEmpty(lastName);
 
     private static bool IsEmailValid(string email) =>
-        email.Contains("@") && email.Contains(".");
+        email.Contains('@') && email.Contains('.');
 
     private static bool IsUserOver21y(DateTime dateOfBirth)
     {
