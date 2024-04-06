@@ -12,9 +12,9 @@ public class ClientTests
         var client = new Client();
         
         // Act
-        client.Type = "Test";
+        client.Type = ClientType.ImportantClient;
         // Assert
-        Assert.Equal("Test", client.Type);
+        Assert.Equal(ClientType.ImportantClient, client.Type);
     }
     
     [Fact]
