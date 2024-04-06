@@ -1,12 +1,11 @@
 using JetBrains.Annotations;
-using LegacyApp;
 
 namespace LegacyApp.Tests;
 
-[TestSubject(typeof(UserService))]
-public class UserServiceTest
-{
+[TestSubject(typeof(UserValidator))]
 
+public class UserValidatorTest
+{
     [Fact]
     public void ShouldNotAddUserWithEmptyFirstName()
     {
@@ -62,17 +61,4 @@ public class UserServiceTest
         // Assert
         Assert.False(success);
     }
-    
-  /*  [Fact]
-    public void ShouldAddUserSuccesfully()
-    {
-        // Arrange
-        var userService = new UserService();
-
-        // Act
-        var success = userService.AddUser("Kazimierz", "Wielki", "ja@tu.com", DateTime.Now.AddYears(-22), 100);
-
-        // Assert
-        Assert.True(success);
-  */  
 }

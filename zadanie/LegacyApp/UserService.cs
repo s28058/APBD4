@@ -11,37 +11,12 @@ namespace LegacyApp
             _clientRepository = clientRepository ?? new InMemoryClientRepository();
         }
 
-        private static bool AreNamesValid(string firstName, string lastName) => 
-            !string.IsNullOrEmpty(firstName) && !string.IsNullOrEmpty(lastName);
-
-        private static bool IsEmailValid(string email) =>
-            email.Contains("@") && email.Contains(".");
-
-        private static bool IsUserOver21y(DateTime dateOfBirth)
-        {
-            var now = DateTime.Now;
-            int age = now.Year - dateOfBirth.Year;
-            if (now.Month < dateOfBirth.Month || (now.Month == dateOfBirth.Month && now.Day < dateOfBirth.Day)) age--;
-
-            if (age < 21)
-            {
-                return false;
-            }
-
-            return true;
-        }
+        
 
         public bool AddUser(string firstName, string lastName, string email, DateTime dateOfBirth, int clientId)
         {
-            if (!AreNamesValid(firstName, lastName))
-                return false;
-
-            if (!IsEmailValid(email))
-            {
-                return false;
-            }
-
-            if (!IsUserOver21y(dateOfBirth))
+            var userValidator = new UserValidator();
+            if (!userValidator.ValidateUser(firstName,lastName,email,dateOfBirth))
             {
                 return false;
             }
@@ -57,11 +32,11 @@ namespace LegacyApp
                 LastName = lastName
             };
 
-            if (client.Type == "VeryImportantClient")
+            if (client.Type == ClientType.VeryImportantClient)
             {
                 user.HasCreditLimit = false;
             }
-            else if (client.Type == "ImportantClient")
+            else if (client.Type == ClientType.ImportantClient)
             {
                 using (var userCreditService = new UserCreditService())
                 {
